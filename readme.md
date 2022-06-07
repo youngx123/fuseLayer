@@ -16,6 +16,7 @@ class Conv(nn.Module):
         return self.relu(self.conv(x))
 ```
 
+融合conv + bn 层
 ```python
 for m in model.modules():
     if isinstance(m, Conv) and hasattr(m, "bn"):
@@ -24,7 +25,9 @@ for m in model.modules():
         m.forward = m.forward_fuse  # update forward
 ```
 
+
 > https://github.com/pytorch/pytorch/blob/master/torch/nn/utils/fusion.py
 
-> yolov5 fuse conv and bn layer
+yolov5 fuse conv and bn layer
+
 > https://github.com/ultralytics/yolov5/blob/master/models/yolo.py

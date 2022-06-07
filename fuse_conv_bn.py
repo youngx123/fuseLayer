@@ -224,12 +224,10 @@ if __name__ == '__main__':
     #             m.conv = fuse_conv_and_bn(m.conv, m.bn)  # update conv
     #             delattr(m, 'bn')  # remove batchnorm
     #             m.forward = m.forward_fuse  # update forward
-    #     self.info()
-    #     return self
 
     # #
     # a = torch.randn(2, 3, 224, 224)
-    net1 = Model(fuse=False)
+    # net1 = Model(fuse=False)
     # net1.eval()
     # with torch.no_grad():
     #     out1 = net1(a)
@@ -244,21 +242,24 @@ if __name__ == '__main__':
     # print(error)
 
     # 保存模型，并加载融合 conv + bn
+    net1 = Model()
     torch.save(net1, "model.pt")
 
     model = torch.load("model.pt")
-    a = torch.randn(2, 3, 224, 224)
+    a = torch.randn(2, 3, 448, 448)
     model.eval()
     t1 = time.time()
     with torch.no_grad():
         out1 = model(a)
     t2 = time.time()
     print(t2 - t1)
+
     for m in model.modules():
         if isinstance(m, Conv) and hasattr(m, "bn"):
             m.conv = fuse_conv_and_bn(m.conv, m.bn)  # update conv
             delattr(m, 'bn')  # remove batchnorm
             m.forward = m.forward_fuse  # update forward
+
     t3 = time.time()
     with torch.no_grad():
         out2 = model(a)

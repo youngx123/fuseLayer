@@ -1,5 +1,21 @@
 ### 融合模型中的 conv + bn 层, 加速模型推理速度
 
+推导过程:
+
+![BN2](https://github.com/youngx123/pic/blob/main/BN2.png?raw=true)
+
+![BN3](https://github.com/youngx123/pic/blob/main/BN3.png?raw=true)
+
+根据以上公式， 可以将其表示为矩阵形式为：
+
+![BN4](https://github.com/youngx123/pic/blob/main/BN4.jpg?raw=true)
+
+进而可以表示为：
+
+![BN5](https://github.com/youngx123/pic/blob/main/BN5.png?raw=true)
+
+![nn.BatchNorm参数](https://github.com/youngx123/pic/blob/main/bn_weight.png?raw=true)
+
 基础模块
 ```python
 class Conv(nn.Module):

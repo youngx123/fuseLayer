@@ -46,7 +46,7 @@ for m in model.modules():
 ### 卷积核参数重构
 卷积核参数重构在推理阶段进行，主要目的还是加速模型的推理速度，因此在卷积核参数重构时，可以先进行 卷积层 和 BN 层的参数融合，然后在进行卷积核参数重构
 
-`structural_reparam.py` 为 `ACNet`网络结构，通过函数
+`structural_reparam.py` 为 `ACNet`网络结构，通过函数 将 `3x3`、`1x3`和 `3x1`卷积模块重构为 `3 x 3 `卷积大小
 ```python
 def _add_to_square_kernel(self, square_kernel, asym_kernel):
     asym_h = asym_kernel.size(2)

@@ -14,6 +14,8 @@
 
 ![BN5](https://github.com/youngx123/pic/blob/main/BN5.png?raw=true)
 
+nn.BatchNorm2d中参数和超参数表示：
+
 ![nn.BatchNorm参数](https://github.com/youngx123/pic/blob/main/bn_weight.png?raw=true)
 
 基础模块

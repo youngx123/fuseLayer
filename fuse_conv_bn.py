@@ -32,9 +32,9 @@ def fuse_conv_and_bn(conv, bn):
     fusedconv.weight.copy_(torch.mm(w_bn, w_conv).view(fusedconv.weight.shape))
 
     # Prepare spatial bias
-    b_conv = torch.zeros(conv.weight.size(0), device=conv.weight.device) if conv.bias is None else conv.bias
+    # b_conv = torch.zeros(conv.weight.size(0), device=conv.weight.device) if conv.bias is None else conv.bias
     b_bn = bn.bias - bn.weight.mul(bn.running_mean).div(torch.sqrt(bn.running_var + bn.eps))
-    fusedconv.bias.copy_(torch.mm(w_bn, b_conv.reshape(-1, 1)).reshape(-1) + b_bn)
+    fusedconv.bias.copy_(b_bn)
 
     return fusedconv
 
@@ -44,6 +44,10 @@ class Conv(nn.Module):
         super(Conv, self).__init__()
         self.conv = nn.Conv2d(inchannel, outchannel, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn = nn.BatchNorm2d(outchannel)
+
+        self.conv2 = nn.Conv2d(inchannel, outchannel, kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(outchannel)
+
         self.relu = nn.ReLU()
 
     def forward(self, x):
@@ -101,7 +105,6 @@ class Model(nn.Module):
 
         self.conv3 = self.__makeLayer(3, 128, 256)
         self.conv4 = self.__makeLayer(3, 256, 512)
-        # self.pool = nn.AvgPool2d(kernel_size=1, stride=1)
 
         # for m in self.modules():
         #     if isinstance(m, nn.Conv2d):
